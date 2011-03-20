@@ -35,7 +35,7 @@ section {
 }
 
 section h1 {
-	font-size: 200%;
+	font-size: 150%;
 }
 
 /* Links */
@@ -88,6 +88,30 @@ nav ul li a:visited {
 
 nav ul li a:hover {
 	text-decoration: underline;
+}
+
+/* User show page */
+
+table.profile {
+	width: 100%;
+	margin-bottom: 0;
+}
+
+td.main {
+	width: 70%;
+	padding: 1em;
+}
+
+td.sidebar {
+	width: 30%;
+	padding: 1em;
+	vertical-align: top;
+	background: #ffc;
+}
+
+.profile img.gravatar {
+	border: 1px solid #999;
+	margin-bottom: -15px;
 }
 
 /* Sign up button */
