@@ -98,12 +98,12 @@ table.profile {
 }
 
 td.main {
-	width: 70%;
+	width: 63%;
 	padding: 1em;
 }
 
 td.sidebar {
-	width: 30%;
+	width: 37%;
 	padding: 1em;
 	vertical-align: top;
 	background: #ffc;
@@ -184,4 +184,12 @@ a.signup_button {
 #error_explanation ul li {
 	font-size: 12px;
 	list-style: square;
+}
+
+ul.users {
+	margin-top: 1em;
+}
+
+.users li {
+	list-style: none;
 }
