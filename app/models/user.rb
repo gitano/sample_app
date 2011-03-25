@@ -4,7 +4,17 @@ class User < ActiveRecord::Base
 	attr_accessor	:password
 	attr_accessible	:name, :email, :password, :password_confirmation
 	
-	has_many :microposts, :dependent => :destroy
+	has_many :microposts,				:dependent => :destroy # automatically infers :foreign_key => "user_id"
+	has_many :relationships,			:foreign_key => "follower_id",
+										:dependent => :destroy
+	has_many :following, 				:through => :relationships,
+										:source => :followed # without source, it would have been   has_many :followeds, ...
+										
+	has_many :reverse_relationships,	:foreign_key => "followed_id",
+										:class_name => "Relationship",
+										:dependent => :destroy
+	has_many :followers,				:through => :reverse_relationships,
+										:source => :follower # here :source is kept for symmetry but is not needed
 	
 	email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	
@@ -37,9 +47,20 @@ class User < ActiveRecord::Base
 		(user && user.salt == cookie_salt) ? user : nil
 	end
 	
+	def following?(followed)
+		relationships.find_by_followed_id(followed)
+	end
+	
+	def follow!(followed)
+		relationships.create!(:followed_id => followed.id) # equivalent to self.relationships...
+	end
+	
+	def unfollow!(followed)
+		relationships.find_by_followed_id(followed).destroy
+	end
+	
 	def feed
-		# This is preliminary. See Chapter 12 for the full implementation.
-		Micropost.where("user_id = ?", id)
+		Micropost.from_users_followed_by(self)
 	end
 	
 	private
@@ -59,5 +80,9 @@ class User < ActiveRecord::Base
 		
 		def secure_hash(string)
 			Digest::SHA2.hexdigest(string)
+		end
+		
+		def to_s
+			"#{name} <#{email}>"
 		end
 end
